@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
@@ -1024,7 +1024,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function BlogPost({ params }: PageProps) {
   const { slug } = await params;
   const post = await getBlogPost(slug);
-  if (!post) return notFound();
+  if (!post) {
+    // Old indexed URLs differ from the canonical slug only by letter case
+    // (e.g. /blog/Companionship-Care-for-Seniors). Case-only redirects can't
+    // live in next.config.js redirects() because source matching is
+    // case-insensitive there and self-loops, so normalise here instead.
+    const canonical = posts.find((p) => p.id.toLowerCase() === slug.toLowerCase());
+    if (canonical && canonical.id !== slug) permanentRedirect(`/blog/${canonical.id}`);
+    return notFound();
+  }
 
   const markdown = post.content;
   const faqs = blogFAQs[post.id as keyof typeof blogFAQs] || [];

@@ -150,12 +150,15 @@ const nextConfig = {
       // Blog slug cleanup (June 2026): old CamelCase/typo slugs -> clean kebab-case.
       // Old URLs are indexed in Google, so these 301s preserve rankings.
       { source: '/blog/Top-Personal-Kitchen-Hygiene-Tips-Every-Home-Cook-in-India', destination: '/blog/kitchen-hygiene-tips-home-cooks-india', permanent: true },
-      { source: '/blog/Companionship-Care-for-Seniors', destination: '/blog/companionship-care-for-seniors', permanent: true },
+      // NOTE: case-only redirects (e.g. /blog/Companionship-Care-for-Seniors)
+      // must NOT live here: Next matches redirect sources case-insensitively,
+      // so a case-only rule also matches its own destination and loops forever.
+      // Those are handled by the case-insensitive slug lookup in
+      // app/blog/[slug]/page.tsx instead.
       { source: '/blog/Beyond-the-9-to-5', destination: '/blog/24-7-live-in-nanny-bangalore-working-parents', permanent: true },
       { source: '/blog/The-Ultimate-Guide-to-Finding-Trusted-Domestic-Help-Services-in-Bareilly', destination: '/blog/trusted-domestic-help-services-bareilly-guide', permanent: true },
       { source: '/blog/Breaking-the-Myths', destination: '/blog/part-time-maid-myths-indian-homes', permanent: true },
       { source: '/blog/Domestc-Help-Etiquette', destination: '/blog/domestic-help-etiquette-working-relationship', permanent: true },
-      { source: '/blog/North-Indian-vs-South-Indian-Live-in-Cooks', destination: '/blog/north-indian-vs-south-indian-live-in-cooks', permanent: true },
       { source: '/blog/The-Evolution-of-House-Maid-Services-in-India', destination: '/blog/evolution-house-maid-services-india', permanent: true },
       // 1
       { source: '/home', destination: '/', permanent: true },
